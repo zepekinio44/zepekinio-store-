@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Café Zepekinio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brown-dark: #1A0F0A;
+  --brown-mid: #2C1A0E;
+  --brown-card: #3A2214;
+  --brown-light: #5C3D2E;
+  --cream: #F5ECD7;
+  --cream-dim: #B8A48A;
+  --gold: #D4A843;
+  --gold-light: #F0C96A;
+  --white-choc: #F8E8C8;
+  --dark-choc: #3D1F0D;
+  --accent: #E85D3A;
+  --border: rgba(212,168,67,0.2);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Outfit',sans-serif;
+  background:var(--brown-dark);
+  color:var(--cream);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  background:linear-gradient(135deg,var(--brown-dark),var(--brown-mid));
+  border-bottom:1px solid var(--border);
+  padding:14px 20px;
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.logo { display:flex; align-items:center; gap:12px; }
+.logo-img {
+  width:44px; height:44px; border-radius:14px;
+  background:linear-gradient(135deg,var(--brown-card),var(--brown-light));
+  border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px;
+}
+.logo-texts {}
+.logo-name {
+  font-family:'Playfair Display',serif;
+  font-size:17px; font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  line-height:1.1;
+}
+.logo-sub { font-size:10px; color:var(--cream-dim); letter-spacing:.05em; margin-top:1px; }
+
+.cart-btn {
+  position:relative;
+  background:rgba(212,168,67,.1); border:1px solid var(--border);
+  border-radius:12px; width:44px; height:44px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:20px; transition:all .2s;
+}
+.cart-btn:hover { background:rgba(212,168,67,.2); }
+.cart-count {
+  position:absolute; top:-6px; left:-6px;
+  background:var(--accent); color:white;
+  font-size:10px; font-weight:700;
+  width:18px; height:18px; border-radius:50%;
+  display:none; align-items:center; justify-content:center;
+}
+
+/* ── HERO ── */
+.hero {
+  margin:16px;
+  background:linear-gradient(135deg,#2C1A0E,#1A0F0A);
+  border:1px solid var(--border);
+  border-radius:22px; padding:26px 20px;
+  position:relative; overflow:hidden;
+  text-align:center;
+}
+.hero::before {
+  content:''; position:absolute;
+  top:-60px; left:50%; transform:translateX(-50%);
+  width:200px; height:200px;
+  background:radial-gradient(circle,rgba(212,168,67,.12),transparent 70%);
+}
+.hero-cookie { font-size:52px; margin-bottom:10px; display:block; }
+.hero h1 {
+  font-family:'Playfair Display',serif;
+  font-size:24px; font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  margin-bottom:6px;
+}
+.hero p { color:var(--cream-dim); font-size:13px; line-height:1.6; }
+.hero-tags { display:flex; gap:8px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
+.htag {
+  background:rgba(212,168,67,.12); border:1px solid rgba(212,168,67,.25);
+  color:var(--gold-light); font-size:11px; font-weight:600;
+  padding:4px 12px; border-radius:20px;
+}
+
+/* ── SECTION TITLE ── */
+.section-head {
+  padding:20px 20px 12px;
+  display:flex; align-items:center; gap:10px;
+}
+.section-head .line {
+  flex:1; height:1px;
+  background:linear-gradient(90deg,var(--border),transparent);
+}
+.section-head h2 {
+  font-family:'Playfair Display',serif;
+  font-size:16px; font-weight:700;
+  color:var(--gold-light);
+  white-space:nowrap;
+}
+
+/* ── PRODUCTS GRID ── */
+.products {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:14px; padding:0 16px 120px;
+}
+
+.product-card {
+  background:var(--brown-card);
+  border:1px solid var(--border);
+  border-radius:20px; overflow:hidden;
+  transition:all .25s; cursor:pointer;
+  position:relative;
+}
+.product-card:hover { transform:translateY(-3px); border-color:rgba(212,168,67,.5); box-shadow:0 8px 24px rgba(0,0,0,.4); }
+
+.product-img {
+  width:100%; aspect-ratio:1; overflow:hidden;
+  background:var(--brown-mid);
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.product-img img { width:100%; height:100%; object-fit:cover; }
+.product-img .placeholder {
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  color:var(--brown-light);
+}
+.product-img .placeholder .p-icon { font-size:36px; opacity:.5; }
+.product-img .placeholder span { font-size:10px; opacity:.4; }
+
+.cat-ribbon {
+  position:absolute; top:8px; right:8px;
+  font-size:10px; font-weight:700; padding:3px 10px; border-radius:8px;
+  color:white;
+}
+.cat-ribbon.dark { background:rgba(61,31,13,.9); border:1px solid rgba(212,168,67,.4); color:var(--gold-light); }
+.cat-ribbon.white { background:rgba(248,232,200,.9); border:1px solid rgba(212,168,67,.4); color:var(--brown-dark); }
+
+.product-info { padding:12px; }
+.product-name {
+  font-family:'Playfair Display',serif;
+  font-size:14px; font-weight:700; margin-bottom:3px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.product-desc { font-size:11px; color:var(--cream-dim); margin-bottom:10px; min-height:16px; }
+.product-footer { display:flex; align-items:center; justify-content:space-between; }
+.price { font-size:15px; font-weight:700; color:var(--gold-light); }
+.price span { font-size:11px; font-weight:400; color:var(--cream-dim); }
+
+.add-btn {
+  width:32px; height:32px; border-radius:10px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; color:var(--brown-dark); font-weight:900;
+  transition:all .2s;
+}
+.add-btn:active { transform:scale(.92); }
+
+/* ── CART ── */
+.overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.8); z-index:300;
+  backdrop-filter:blur(5px); align-items:flex-end;
+}
+.overlay.open { display:flex; }
+.cart-panel {
+  background:var(--brown-mid);
+  border-top:1px solid var(--border);
+  border-radius:24px 24px 0 0;
+  width:100%; max-height:82vh;
+  overflow-y:auto; padding:20px;
+  animation:slideUp .3s ease;
+}
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.cart-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.cart-title { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--gold-light); }
+.close-x {
+  background:rgba(255,255,255,.08); border:none; border-radius:10px;
+  width:36px; height:36px; cursor:pointer; color:var(--cream);
+  font-size:18px; display:flex; align-items:center; justify-content:center;
+}
+.cart-item {
+  display:flex; align-items:center; gap:12px;
+  padding:12px; background:var(--brown-card);
+  border-radius:14px; margin-bottom:10px;
+  border:1px solid var(--border);
+}
+.ci-thumb {
+  width:52px; height:52px; border-radius:10px;
+  background:var(--brown-dark); flex-shrink:0;
+  overflow:hidden; display:flex; align-items:center; justify-content:center;
+  font-size:24px;
+}
+.ci-thumb img { width:100%; height:100%; object-fit:cover; }
+.ci-info { flex:1; min-width:0; }
+.ci-name { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ci-price { font-size:13px; color:var(--gold-light); font-weight:600; margin-top:2px; }
+.ci-qty { display:flex; align-items:center; gap:8px; }
+.qty-btn {
+  width:28px; height:28px; border-radius:8px;
+  background:rgba(212,168,67,.15); border:1px solid var(--border);
+  color:var(--gold-light); font-size:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-weight:700;
+}
+.qty-num { font-weight:700; min-width:20px; text-align:center; }
+.cart-empty { text-align:center; padding:40px; color:var(--cream-dim); }
+.cart-empty .e-icon { font-size:48px; margin-bottom:12px; }
+.cart-total {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:16px 0; border-top:1px solid var(--border); margin-top:10px;
+}
+.total-label { color:var(--cream-dim); font-size:14px; }
+.total-price { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--gold-light); }
+.checkout-btn {
+  width:100%; padding:16px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border:none; border-radius:16px;
+  font-family:'Outfit',sans-serif; font-size:16px; font-weight:700;
+  color:var(--brown-dark); cursor:pointer; transition:all .2s; margin-top:12px;
+}
+.checkout-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(212,168,67,.3); }
+
+/* ── ADMIN ── */
+#adminToggle {
+  position:fixed; bottom:24px; right:20px; z-index:500;
+  width:48px; height:48px; border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border:none; font-size:20px; cursor:pointer;
+  box-shadow:0 4px 20px rgba(212,168,67,.4);
+  display:flex; align-items:center; justify-content:center;
+}
+.admin-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.85); z-index:600;
+  backdrop-filter:blur(6px); align-items:flex-end;
+}
+.admin-overlay.open { display:flex; }
+.admin-panel {
+  background:var(--brown-mid);
+  border-top:1px solid var(--border);
+  border-radius:24px 24px 0 0;
+  width:100%; max-height:92vh;
+  overflow-y:auto; padding:24px 20px 36px;
+  animation:slideUp .3s ease;
+}
+.admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+.admin-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold-light); }
+.admin-sec { margin-bottom:24px; }
+.admin-sec h3 {
+  font-size:11px; font-weight:700; color:var(--gold);
+  text-transform:uppercase; letter-spacing:.1em; margin-bottom:12px;
+}
+
+/* product slots */
+.slots { display:flex; flex-direction:column; gap:10px; }
+.slot {
+  background:var(--brown-card); border:1px solid var(--border);
+  border-radius:16px; padding:14px;
+}
+.slot-header {
+  display:flex; align-items:center; gap:10px; margin-bottom:12px;
+}
+.slot-num {
+  width:28px; height:28px; border-radius:8px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:800; color:var(--brown-dark); flex-shrink:0;
+}
+.slot-label { font-size:13px; font-weight:700; }
+.slot-cat { font-size:11px; color:var(--cream-dim); }
+
+.img-upload {
+  width:100%; aspect-ratio:16/9;
+  border:2px dashed rgba(212,168,67,.3);
+  border-radius:12px; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; color:var(--cream-dim); font-size:12px;
+  background:var(--brown-mid); transition:border .2s;
+  position:relative; overflow:hidden; margin-bottom:10px;
+}
+.img-upload:hover { border-color:var(--gold); }
+.img-upload .u-icon { font-size:26px; }
+.img-upload img {
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+}
+.img-upload input[type=file] { display:none; }
+
+.row2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.field { margin-bottom:8px; }
+.field label { display:block; font-size:11px; color:var(--cream-dim); margin-bottom:4px; }
+.field input {
+  width:100%; padding:9px 12px;
+  background:var(--brown-dark); border:1px solid var(--border);
+  border-radius:10px; color:var(--cream);
+  font-family:'Outfit',sans-serif; font-size:13px; outline:none;
+  transition:border .2s;
+}
+.field input:focus { border-color:var(--gold); }
+
+.slot-choc-dark { border-left:3px solid var(--gold); }
+.slot-choc-white { border-left:3px solid var(--white-choc); }
+
+/* toast */
+.toast {
+  position:fixed; bottom:84px; left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:var(--brown-card); border:1px solid var(--border);
+  border-radius:14px; padding:12px 20px;
+  font-size:13px; font-weight:600; color:var(--gold-light);
+  z-index:999; transition:transform .3s cubic-bezier(.175,.885,.32,1.275);
+  white-space:nowrap; pointer-events:none;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-img">🍪</div>
+    <div class="logo-texts">
+      <div class="logo-name">Café Zepekinio</div>
+      <div class="logo-sub">Artisan Cookies • Fait maison</div>
+    </div>
+  </div>
+  <div class="cart-btn" onclick="openCart()">
+    🛒
+    <div class="cart-count" id="cartCount">0</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-cookie">🍪</span>
+  <h1>Nos Cookies Artisanaux</h1>
+  <p>Chocolat noir intense ou chocolat blanc fondant —<br>chaque bouchée est un voyage.</p>
+  <div class="hero-tags">
+    <span class="htag">🍫 Chocolat Noir</span>
+    <span class="htag">🤍 Chocolat Blanc</span>
+    <span class="htag">✨ Fait maison</span>
+  </div>
+</div>
+
+<!-- DARK CHOCOLATE -->
+<div class="section-head">
+  <h2>🍫 Chocolat Noir</h2>
+  <div class="line"></div>
+</div>
+<div class="products" id="gridDark"></div>
+
+<!-- WHITE CHOCOLATE -->
+<div class="section-head">
+  <h2>🤍 Chocolat Blanc</h2>
+  <div class="line"></div>
+</div>
+<div class="products" id="gridWhite"></div>
+
+<!-- CART -->
+<div class="overlay" id="cartOverlay" onclick="closeCartClick(event)">
+  <div class="cart-panel">
+    <div class="cart-header">
+      <div class="cart-title">🛒 Mon Panier</div>
+      <button class="close-x" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cartItems"></div>
+  </div>
+</div>
+
+<!-- ADMIN TOGGLE -->
+<button id="adminToggle" onclick="openAdmin()">⚙️</button>
+
+<!-- ADMIN PANEL -->
+<div class="admin-overlay" id="adminOverlay" onclick="closeAdminClick(event)">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <div class="admin-title">⚙️ Gérer les produits</div>
+      <button class="close-x" onclick="closeAdmin()">✕</button>
+    </div>
+
+    <div class="admin-sec">
+      <h3>🍫 Chocolat Noir — 4 produits</h3>
+      <div class="slots" id="slotsDark"></div>
+    </div>
+
+    <div class="admin-sec">
+      <h3>🤍 Chocolat Blanc — 3 produits</h3>
+      <div class="slots" id="slotsWhite"></div>
+    </div>
+
+    <button class="checkout-btn" onclick="saveAll()" style="margin-top:8px">💾 Enregistrer tout</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──
+const DARK_COUNT = 4;
+const WHITE_COUNT = 3;
+
+let data = JSON.parse(localStorage.getItem('zepekinio_data') || 'null') || {
+  dark: Array.from({length:DARK_COUNT}, (_,i) => ({ id:'d'+(i+1), name:'', price:'', img:null })),
+  white: Array.from({length:WHITE_COUNT}, (_,i) => ({ id:'w'+(i+1), name:'', price:'', img:null }))
+};
+
+let cart = {};
+
+// ── BUILD ADMIN SLOTS ──
+function buildSlots() {
+  buildSlotGroup('slotsDark', data.dark, 'dark');
+  buildSlotGroup('slotsWhite', data.white, 'white');
+}
+
+function buildSlotGroup(containerId, items, type) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = items.map((p, i) => `
+    <div class="slot slot-choc-${type}" id="slot-${p.id}">
+      <div class="slot-header">
+        <div class="slot-num">${i+1}</div>
+        <div>
+          <div class="slot-label">Produit ${i+1}</div>
+          <div class="slot-cat">${type === 'dark' ? 'Chocolat Noir 🍫' : 'Chocolat Blanc 🤍'}</div>
+        </div>
+      </div>
+
+      <div class="img-upload" onclick="document.getElementById('img-${p.id}').click()">
+        <div class="u-icon">📷</div>
+        <span>Choisir une photo</span>
+        <input type="file" id="img-${p.id}" accept="image/*" onchange="handleImg(event,'${p.id}','${type}',${i})">
+        ${p.img ? `<img src="${p.img}">` : ''}
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Nom du cookie</label>
+          <input type="text" id="name-${p.id}" value="${p.name}" placeholder="Ex: Classic">
+        </div>
+        <div class="field">
+          <label>Prix (€)</label>
+          <input type="number" id="price-${p.id}" value="${p.price}" placeholder="0.00" min="0" step="0.01">
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function handleImg(e, id, type, idx) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const imgData = ev.target.result;
+    if (type === 'dark') data.dark[idx].img = imgData;
+    else data.white[idx].img = imgData;
+
+    // show preview
+    const box = e.target.closest('.img-upload');
+    let img = box.querySelector('img');
+    if (!img) { img = document.createElement('img'); box.appendChild(img); }
+    img.src = imgData;
+    box.querySelector('.u-icon').style.display = 'none';
+    box.querySelector('span').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveAll() {
+  // collect from inputs
+  data.dark.forEach((p, i) => {
+    p.name = document.getElementById('name-'+p.id)?.value.trim() || '';
+    p.price = document.getElementById('price-'+p.id)?.value || '';
+  });
+  data.white.forEach((p, i) => {
+    p.name = document.getElementById('name-'+p.id)?.value.trim() || '';
+    p.price = document.getElementById('price-'+p.id)?.value || '';
+  });
+  localStorage.setItem('zepekinio_data', JSON.stringify(data));
+  renderStore();
+  showToast('✅ Modifications enregistrées !');
+}
+
+// ── STORE RENDER ──
+function renderStore() {
+  renderGrid('gridDark', data.dark, 'dark');
+  renderGrid('gridWhite', data.white, 'white');
+}
+
+function renderGrid(containerId, items, type) {
+  const grid = document.getElementById(containerId);
+  grid.innerHTML = items.map(p => {
+    const hasData = p.name;
+    return `
+      <div class="product-card" style="${!hasData?'opacity:.4':''}">
+        <div class="product-img">
+          ${p.img
+            ? `<img src="${p.img}" alt="${p.name}">`
+            : `<div class="placeholder"><span class="p-icon">🍪</span><span>À compléter</span></div>`}
+          <div class="cat-ribbon ${type}">${type==='dark'?'🍫 Noir':'🤍 Blanc'}</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">${p.name || 'Nom à définir'}</div>
+          <div class="product-desc">&nbsp;</div>
+          <div class="product-footer">
+            <div class="price">${p.price ? parseFloat(p.price).toFixed(2) : '—'} <span>€</span></div>
+            <button class="add-btn" onclick="addToCart('${p.id}')" ${!hasData?'disabled style="opacity:.3"':''}>+</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── CART ──
+function addToCart(id) {
+  const p = [...data.dark,...data.white].find(x => x.id === id);
+  if (!p || !p.name) return;
+  cart[id] = (cart[id] || 0) + 1;
+  updateCartCount();
+  showToast(`✅ ${p.name} ajouté`);
+}
+
+function updateCartCount() {
+  const total = Object.values(cart).reduce((a,b) => a+b, 0);
+  const el = document.getElementById('cartCount');
+  el.textContent = total;
+  el.style.display = total > 0 ? 'flex' : 'none';
+}
+
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  renderCart();
+}
+function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); }
+function closeCartClick(e) { if(e.target===document.getElementById('cartOverlay')) closeCart(); }
+
+function renderCart() {
+  const all = [...data.dark,...data.white];
+  const container = document.getElementById('cartItems');
+  const items = Object.entries(cart).filter(([,q]) => q > 0);
+  if (!items.length) {
+    container.innerHTML = `<div class="cart-empty"><div class="e-icon">🍪</div><div>Votre panier est vide</div></div>`;
+    return;
+  }
+  let total = 0;
+  let html = items.map(([id,qty]) => {
+    const p = all.find(x => x.id === id);
+    if (!p) return '';
+    const subtotal = parseFloat(p.price||0) * qty;
+    total += subtotal;
+    return `
+      <div class="cart-item">
+        <div class="ci-thumb">${p.img ? `<img src="${p.img}">` : '🍪'}</div>
+        <div class="ci-info">
+          <div class="ci-name">${p.name}</div>
+          <div class="ci-price">${subtotal.toFixed(2)} €</div>
+        </div>
+        <div class="ci-qty">
+          <button class="qty-btn" onclick="changeQty('${id}',-1)">−</button>
+          <span class="qty-num">${qty}</span>
+          <button class="qty-btn" onclick="changeQty('${id}',1)">+</button>
+        </div>
+      </div>`;
+  }).join('');
+  html += `
+    <div class="cart-total">
+      <span class="total-label">Total</span>
+      <span class="total-price">${total.toFixed(2)} €</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Commander 🚀</button>`;
+  container.innerHTML = html;
+}
+
+function changeQty(id, delta) {
+  cart[id] = Math.max(0, (cart[id]||0) + delta);
+  if (cart[id] === 0) delete cart[id];
+  updateCartCount();
+  renderCart();
+}
+
+function checkout() {
+  const all = [...data.dark,...data.white];
+  const items = Object.entries(cart).filter(([,q]) => q > 0);
+  if (!items.length) return;
+  const total = items.reduce((a,[id,q]) => a + parseFloat(all.find(x=>x.id===id)?.price||0)*q, 0);
+  if (window.Telegram?.WebApp) {
+    window.Telegram.WebApp.sendData(JSON.stringify({ type:'order', items:cart, total }));
+  } else {
+    let msg = '🍪 Nouvelle commande Café Zepekinio:\n\n';
+    items.forEach(([id,qty]) => {
+      const p = all.find(x=>x.id===id);
+      if(p) msg += `• ${p.name} × ${qty} = ${(parseFloat(p.price)*qty).toFixed(2)} €\n`;
+    });
+    msg += `\nTotal: ${total.toFixed(2)} €`;
+    alert(msg);
+    cart = {};
+    updateCartCount();
+    closeCart();
+    showToast('✅ Commande envoyée !');
+  }
+}
+
+// ── ADMIN ──
+function openAdmin() {
+  buildSlots();
+  document.getElementById('adminOverlay').classList.add('open');
+}
+function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
+function closeAdminClick(e) { if(e.target===document.getElementById('adminOverlay')) closeAdmin(); }
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── INIT ──
+renderStore();
+</script>
+</body>
+</html>
